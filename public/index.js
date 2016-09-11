@@ -114,7 +114,14 @@ function addUser(usr) {
   hStr += '   </p>';
   hStr += '</div>';
 
-  $(".results h2").after(hStr);
+  var lastItem = $(".results .cui__selector--direct__item:last");
+  if (lastItem.length == 0) {
+    /* Happend only first item when list is empty. */
+    $(".results h2").after(hStr);
+  }
+  else {
+    lastItem.after(hStr);
+  }
 }
 
 /* get timestamp of birthday and return age number (1-120). */
