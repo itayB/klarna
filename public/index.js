@@ -1,8 +1,27 @@
+/* Saves the last ajax request. */
+var xhr = null;
+
+/* Saves the last data results. */
+var dataArr = [];
+
+/* Saves the number of items showed to the user. */
+var resultSize = 0;
+
 $(function() {
+  /* Handle user search. */
   $(".cui__input__input").on('keyup',search);
+
+  /* Handle scroll down (show more results). */
+  $(window).scroll(scrollDownHandler);
 });
 
-var xhr;
+function scrollDownHandler(event) {
+  /* Reached to the end of the document. */
+  alert($(document).height() + " - " + $(window).height() + " == " + $(window).scrollTop());
+  if ($(document).height() - $(window).height() == $(window).scrollTop()) {
+    
+  }
+}
 
 function search(event) {
   /* retrive current search value. */
@@ -23,8 +42,9 @@ function search(event) {
     $(".cui__input__label").hide();
   }
 
-
+  $("#searchAjax").show();
   xhr = $.get('search?query=' + queryStr, function (data) {
+    $("#searchAjax").hide();
     clearResults();
 
     if (data.length == 0) {
@@ -35,11 +55,10 @@ function search(event) {
       $("h2").html('Search results <span class="cui__selector--direct__results">' + numberWithCommas(data.length) + ' ' + (data.length == 1 ?'Person' : 'People') + ' Found</span>');
     }
 
-
-    // TODO: remove old list
+    resultSize = 10;
 
     /* add new users. */
-    for (var i=0 ; i < 10 /*data.length*/ ; i++) {
+    for (var i=0 ; i < Math.min(resultSize,data.length) ; i++) {
       addUser(data[i]);
     }
 
