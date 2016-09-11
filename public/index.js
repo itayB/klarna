@@ -7,6 +7,7 @@ var dataArr = [];
 /* Saves the number of items showed to the user. */
 var resultSize = 0;
 
+/* Main function. */
 $(function() {
   /* Handle user search. */
   $(".cui__input__input").on('keyup',search);
@@ -15,14 +16,15 @@ $(function() {
   $(window).scroll(scrollDownHandler);
 });
 
+/* Scroller bottom handler - add more users to list. */
 function scrollDownHandler(event) {
   /* Reached to the end of the document. */
-  //alert($(document).height() + " - " + $(window).height() + " == " + $(window).scrollTop());
   if ($(document).height() - $(window).height() == $(window).scrollTop()) {
     addUsers(10);
   }
 }
 
+/* Search handler. */
 function search(event) {
   /* retrive current search value. */
   var queryStr = $(".cui__input__input").val();
@@ -42,9 +44,15 @@ function search(event) {
     $(".cui__input__label").hide();
   }
 
+  /* Show ajax-loader gif. */
   $("#searchAjax").show();
+
+  /* Ajax call. */
   xhr = $.get('search?query=' + queryStr, function (data) {
+    /* Hide ajax-loader gif. */
     $("#searchAjax").hide();
+    
+    /* Remove old results. */
     clearResults();
 
     dataArr = data;
@@ -56,6 +64,7 @@ function search(event) {
     else {
       $("h2").html('Search results <span class="cui__selector--direct__results">' + numberWithCommas(dataArr.length) + ' ' + (dataArr.length == 1 ?'Person' : 'People') + ' Found</span>');
     }
+
     /* Reset number of results presented to the user. */
     resultSize = 0;
     
@@ -64,6 +73,7 @@ function search(event) {
   });
 }
 
+/* Clear the result list. */
 function clearResults() {
     /* Remove all prev items. */
   $(".results .cui__selector--direct__item").remove();
@@ -71,6 +81,7 @@ function clearResults() {
   $("h2").empty();
 }
 
+/* Adds 'amount' users to result list. */
 function addUsers(amount) {
   /* add new users. */
   for (var i=resultSize ; i < Math.min(resultSize+amount,dataArr.length) ; i++) {
@@ -80,6 +91,7 @@ function addUsers(amount) {
   resultSize = Math.min(resultSize+amount,dataArr.length);
 }
 
+/* Add single user to result list. */
 function addUser(usr) {
   var hStr = "";
 
@@ -105,12 +117,14 @@ function addUser(usr) {
   $(".results h2").after(hStr);
 }
 
+/* get timestamp of birthday and return age number (1-120). */
 function getAge(birthday) {
   var birthdayYear = new Date(birthday * 1000).getFullYear();
   var currentYear = new Date().getFullYear();
   return currentYear-birthdayYear;
 }
 
+/* add comma to number. example: 1000 --> 1,000 */
 function numberWithCommas(x) {
   if (x == undefined) {
     return 0;
