@@ -12,8 +12,11 @@ function search(event) {
   if (xhr)
     xhr.abort();
 
+
+  /* Show / Hide placeholder. */
   if (!queryStr.length) {
     $(".cui__input__label").show();
+    clearResults();
     return;
   }
   else {
@@ -21,18 +24,34 @@ function search(event) {
   }
 
 
-  xhr = $.get('search?query=' + queryStr + '&size=10', function (data) {
-    
+  xhr = $.get('search?query=' + queryStr, function (data) {
+    clearResults();
+
+    if (data.length == 0) {
+      $("h2").text('No results, please review your search or try a different one');
+      return;
+    }
+    else {
+      $("h2").html('Search results <span class="cui__selector--direct__results">' + numberWithCommas(data.length) + ' ' + (data.length == 1 ?'Person' : 'People') + ' Found</span>');
+    }
+
+
     // TODO: remove old list
 
     /* add new users. */
-    for (var i=0 ; i < data.length ; i++) {
+    for (var i=0 ; i < 10 /*data.length*/ ; i++) {
       addUser(data[i]);
     }
 
   });
 }
 
+function clearResults() {
+    /* Remove all prev items. */
+  $(".results .cui__selector--direct__item").remove();
+
+  $("h2").empty();
+}
 
 function addUser(usr) {
   var hStr = "";
@@ -60,5 +79,14 @@ function addUser(usr) {
 }
 
 function getAge(birthday) {
-  return 34;
+  var birthdayYear = new Date(birthday * 1000).getFullYear();
+  var currentYear = new Date().getFullYear();
+  return currentYear-birthdayYear;
+}
+
+function numberWithCommas(x) {
+  if (x == undefined) {
+    return 0;
+  }
+  return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }

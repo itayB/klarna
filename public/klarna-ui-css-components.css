@@ -4516,6 +4516,17 @@
   top: 50%;
   width: 20px; }
 
+.cui__selector--direct__results {
+  -webkit-font-smoothing: antialiased;
+  font-family: "Open Sans", "Helvetica Neue", "Helvetica", "Arial", sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  text-rendering: geometricPrecision;
+  color: #9e9ea0;
+  line-height: 20px;
+  margin: -2px 0 2px 10px;
+  padding-right: 5px; }  
+
 .cui__selector--direct__age {
   -webkit-font-smoothing: antialiased;
   font-family: "Open Sans", "Helvetica Neue", "Helvetica", "Arial", sans-serif;

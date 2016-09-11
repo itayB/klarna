@@ -20,18 +20,13 @@ fs.readFile(/* __dirname + '/' + */ './people.json', function (err, data) {
 app.get('/search', function(req, res) {
   var queryStr = req.query.query;
   
-  //TODO: validate number
-  var size = Number(req.query.size);
-
-
-
   queryStr = queryStr.toLowerCase();
 
 
   var tokens = queryStr.split(" ");
   var list = [];
 
-  for (var i=0 ; i < db.length && list.length < size ; i++) {
+  for (var i=0 ; i < db.length ; i++) {
     if (db[i].name.toLowerCase().indexOf(queryStr) !== -1) {
       list.push(db[i]);
     }
