@@ -7,7 +7,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 var db;
 
-fs.readFile(/* __dirname + '/' + */ 'people.json', function (err, data) {
+fs.readFile(/* __dirname + '/' + */ './people.json', function (err, data) {
   if (err) {
     throw err; 
   }
