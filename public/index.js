@@ -17,9 +17,9 @@ $(function() {
 
 function scrollDownHandler(event) {
   /* Reached to the end of the document. */
-  alert($(document).height() + " - " + $(window).height() + " == " + $(window).scrollTop());
+  //alert($(document).height() + " - " + $(window).height() + " == " + $(window).scrollTop());
   if ($(document).height() - $(window).height() == $(window).scrollTop()) {
-    
+    addUsers(10);
   }
 }
 
@@ -47,21 +47,20 @@ function search(event) {
     $("#searchAjax").hide();
     clearResults();
 
-    if (data.length == 0) {
+    dataArr = data;
+
+    if (dataArr.length == 0) {
       $("h2").text('No results, please review your search or try a different one');
       return;
     }
     else {
-      $("h2").html('Search results <span class="cui__selector--direct__results">' + numberWithCommas(data.length) + ' ' + (data.length == 1 ?'Person' : 'People') + ' Found</span>');
+      $("h2").html('Search results <span class="cui__selector--direct__results">' + numberWithCommas(dataArr.length) + ' ' + (dataArr.length == 1 ?'Person' : 'People') + ' Found</span>');
     }
-
-    resultSize = 10;
-
-    /* add new users. */
-    for (var i=0 ; i < Math.min(resultSize,data.length) ; i++) {
-      addUser(data[i]);
-    }
-
+    /* Reset number of results presented to the user. */
+    resultSize = 0;
+    
+    /* Add first 10 results. */
+    addUsers(10);
   });
 }
 
@@ -70,6 +69,15 @@ function clearResults() {
   $(".results .cui__selector--direct__item").remove();
 
   $("h2").empty();
+}
+
+function addUsers(amount) {
+  /* add new users. */
+  for (var i=resultSize ; i < Math.min(resultSize+amount,dataArr.length) ; i++) {
+    addUser(dataArr[i]);
+  }
+
+  resultSize = Math.min(resultSize+amount,dataArr.length);
 }
 
 function addUser(usr) {
@@ -94,7 +102,7 @@ function addUser(usr) {
   hStr += '   </p>';
   hStr += '</div>';
 
-  $(".results h2").append(hStr);
+  $(".results h2").after(hStr);
 }
 
 function getAge(birthday) {
